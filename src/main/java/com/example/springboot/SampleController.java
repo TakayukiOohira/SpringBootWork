@@ -6,6 +6,7 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,13 +14,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.springboot.repositories.InquiryDataRepository;
 import com.example.springboot.repositories.SampleDataRepository;
 
 @Controller
 public class SampleController {
 
 	@Autowired
-	SampleDataRepository repository;
+	SampleDataRepository sampleRepository;
+
+	@Autowired
+	InquiryDataRepository repository;
 
 	@PersistenceContext
 	EntityManager entityManager;
@@ -29,7 +34,7 @@ public class SampleController {
 		mav.setViewName("test");
 		mav.addObject("title","Inquiry Form");
 
-		Iterable<SampleData> list = repository.findAll();
+		Iterable<SampleData> list = sampleRepository.findAll();
 		mav.addObject("data", list);
 		return mav;
 	}
@@ -69,19 +74,29 @@ public class SampleController {
 		return res;
 	}
 
+	@RequestMapping(value = "/complete", method = RequestMethod.POST)
+	@Transactional(readOnly=false)
+	public ModelAndView update(@ModelAttribute("formModel") @Validated InquiryData inquiryData,
+			ModelAndView mav) {
+		repository.saveAndFlush(inquiryData);
+		mav.setViewName("form");
+		mav.addObject("title", "Inquiry Form");
+		return new ModelAndView("redirect:/form");
+	}
+
 	@PostConstruct
 	public void init(){
 		SampleData s1 = new SampleData();
 		s1.setName("ichiro");
 		s1.setMail("ichiro@sample.com");
-		repository.saveAndFlush(s1);
+		sampleRepository.saveAndFlush(s1);
 		SampleData s2 = new SampleData();
 		s2.setName("hanako");
 		s2.setMail("hanako@sample.com");
-		repository.saveAndFlush(s2);
+		sampleRepository.saveAndFlush(s2);
 		SampleData s3 = new SampleData();
 		s3.setName("joro");
 		s3.setMail("joro@sample.com");
-		repository.saveAndFlush(s3);
+		sampleRepository.saveAndFlush(s3);
 	}
 }
