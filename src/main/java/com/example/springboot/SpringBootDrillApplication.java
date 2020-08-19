@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WebBiginnerMavenApplication {
+public class SpringBootDrillApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WebBiginnerMavenApplication.class, args);
+		SpringApplication.run(SpringBootDrillApplication.class, args);
 	}
 
 }
