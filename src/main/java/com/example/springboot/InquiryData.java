@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="inquirydata")
@@ -19,8 +20,9 @@ public class InquiryData {
 	@NotNull
 	private long id;
 
-	@Column(length = 50, nullable = false)
+	@Column(length = 10, nullable = false)
 	@NotEmpty
+	@Size(min=1,max=10)
 	private String name;
 
 	@Column(length = 200, nullable = false)

@@ -6,13 +6,16 @@
 </head>
 <body>
 <h1 th:text="${title}">title</h1>
-<form method="post" action="/confirm">
+<form method="post" action="/confirm" th:object="${formModel}">
 	<label for="name">Name:</label>
-	<input type="text" id="name" name="name"><br>
+	<input type="text" id="name" name="name" th:value="*{name}"><br>
+	<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
 	<label for="email">Email:</label>
-	<input type="text" id="email" name="email"><br>
+	<input type="text" id="email" name="email" th:value="*{email}"><br>
+	<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
 	<label for="contents">Detail:</label>
-	<textarea id="contents" name="contents" rows="3" cols="40"></textarea><br>
+	<textarea id="contents" name="contents" rows="3" cols="40" th:text="*{contents}"></textarea><br>
+	<div th:if="${#fields.hasErrors('contents')}" th:errors="*{contents}"></div>
 	<input type="submit" value="Confirm">
 </form>
 </body>

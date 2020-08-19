@@ -6,6 +6,8 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,11 +34,39 @@ public class SampleController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/form", method = RequestMethod.GET)
+//	@RequestMapping(value = "/form", method = RequestMethod.GET)
+	@RequestMapping(value = "/form")
 	public ModelAndView form(@ModelAttribute("formModel") InquiryData inquiryData, ModelAndView mav) {
 		mav.setViewName("form");
+		mav.addObject("formModel", inquiryData);
 		mav.addObject("title", "Inquiry Form");
 		return mav;
+	}
+
+//	@RequestMapping(value = "/form", method = RequestMethod.POST)
+//	public ModelAndView form_back(@ModelAttribute("formModel") InquiryData inquiryData, ModelAndView mav) {
+//		mav.setViewName("form");
+//		mav.addObject("formModel", inquiryData);
+//		mav.addObject("title", "Inquiry Form");
+//		return mav;
+//	}
+
+	@RequestMapping(value = "/confirm", method = RequestMethod.POST)
+	public ModelAndView confirm(@ModelAttribute("formModel") @Validated InquiryData inquiryData,
+			BindingResult result, ModelAndView mav) {
+		ModelAndView res = null;
+		if (!result.hasErrors()){
+			mav.addObject("title", "Confirm");
+			mav.addObject("formModel", inquiryData);
+			mav.setViewName("confirm");
+			res = mav;
+		} else {
+			mav.setViewName("form");
+			mav.addObject("title", "Inquiry Form");
+			mav.addObject("formModel", inquiryData);
+			res = mav;
+		}
+		return res;
 	}
 
 	@PostConstruct
