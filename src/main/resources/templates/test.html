@@ -7,5 +7,19 @@
 <body>
 <h1 th:text="${title}">title</h1>
 <p>This is a Sample</p>
+
+<table>
+	<tr>
+		<th>ID</th>
+		<th>名前</th>
+		<th>メール</th>
+	</tr>
+	<tr th:each="obj : ${data}">
+		<td th:text="${obj.id}"></td>
+		<td th:text="${obj.name}"></td>
+		<td th:text="${obj.mail}"></td>
+	</tr>
+</table>
+
 </body>
 </html>
